@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VegTrain – Pure Veg Express</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Nunito:wght@300;400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green: #1a7a2e;
+      --lime: #6dbf3e;
+      --yellow: #f5c842;
+      --orange: #f47c26;
+      --cream: #fdf8ef;
+      --dark: #1a1a10;
+      --leaf: #2d9e48;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 6vw;
+      background: rgba(253,248,239,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--lime);
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 900; color: var(--green);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .logo span { color: var(--orange); }
+    .logo .train-icon { font-size: 1.8rem; }
+    nav ul { list-style: none; display: flex; gap: 32px; }
+    nav ul a {
+      text-decoration: none; font-weight: 600; color: var(--dark);
+      font-size: .95rem; letter-spacing: .04em;
+      transition: color .2s;
+    }
+    nav ul a:hover { color: var(--green); }
+    .nav-btn {
+      background: var(--green); color: #fff;
+      border: none; padding: 10px 22px; border-radius: 50px;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .95rem;
+      cursor: pointer; transition: background .2s, transform .15s;
+    }
+    .nav-btn:hover { background: var(--lime); transform: scale(1.04); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; padding: 120px 6vw 60px;
+      gap: 40px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -120px; right: -120px;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, #c8f5b0 0%, transparent 70%);
+      z-index: 0;
+    }
+    .hero-text { position: relative; z-index: 1; }
+    .badge {
+      display: inline-block;
+      background: var(--yellow); color: var(--dark);
+      font-weight: 800; font-size: .8rem; letter-spacing: .12em;
+      padding: 6px 16px; border-radius: 50px; margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 900; line-height: 1.1;
+      color: var(--dark); margin-bottom: 24px;
+    }
+    .hero h1 em { font-style: normal; color: var(--green); }
+    .hero p {
+      font-size: 1.1rem; line-height: 1.75; color: #444;
+      max-width: 500px; margin-bottom: 36px;
+    }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--green); color: #fff;
+      padding: 14px 32px; border-radius: 50px;
+      font-weight: 800; font-size: 1rem; text-decoration: none;
+      transition: background .2s, transform .15s; display: inline-block;
+    }
+    .btn-primary:hover { background: var(--leaf); transform: translateY(-2px); }
+    .btn-secondary {
+      border: 2.5px solid var(--green); color: var(--green);
+      padding: 14px 32px; border-radius: 50px;
+      font-weight: 800; font-size: 1rem; text-decoration: none;
+      transition: all .2s; display: inline-block;
+    }
+    .btn-secondary:hover { background: var(--green); color: #fff; }
+
+    /* hero image area */
+    .hero-visual {
+      position: relative; z-index: 1;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .train-plate {
+      width: 420px; height: 420px; border-radius: 50%;
+      background: linear-gradient(135deg, #e8f9d6 0%, #c4f0a0 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11rem;
+      box-shadow: 0 30px 80px rgba(26,122,46,.22);
+      animation: float 4s ease-in-out infinite;
+      position: relative;
+    }
+    .train-plate::after {
+      content: '🌿';
+      position: absolute; top: 30px; right: 40px; font-size: 3rem;
+      animation: spin 8s linear infinite;
+    }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .floating-tags {
+      position: absolute;
+    }
+    .tag-chip {
+      position: absolute;
+      background: #fff; border-radius: 50px;
+      padding: 8px 18px; font-weight: 700; font-size: .85rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      white-space: nowrap;
+    }
+    .tag-chip:nth-child(1) { top: -20px; left: -60px; color: var(--green); border-left: 4px solid var(--lime); animation: float 3.5s .5s ease-in-out infinite; }
+    .tag-chip:nth-child(2) { bottom: 40px; left: -80px; color: var(--orange); border-left: 4px solid var(--orange); animation: float 4.2s 1s ease-in-out infinite; }
+    .tag-chip:nth-child(3) { top: 60px; right: -90px; color: var(--green); border-left: 4px solid var(--yellow); animation: float 3.8s .2s ease-in-out infinite; }
+
+    /* stats bar */
+    .stats-bar {
+      background: var(--green); color: #fff;
+      display: flex; justify-content: center; gap: 60px;
+      padding: 28px 6vw; flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat strong { display: block; font-size: 2rem; font-family: 'Playfair Display', serif; }
+    .stat span { font-size: .9rem; opacity: .85; }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 90px 6vw; }
+    .section-label {
+      text-transform: uppercase; letter-spacing: .15em; font-size: .8rem;
+      font-weight: 800; color: var(--lime); margin-bottom: 12px;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 900;
+      color: var(--dark); margin-bottom: 20px;
+    }
+
+    /* ── MENU ── */
+    .menu-section { background: #f0fce8; }
+    .menu-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 28px; margin-top: 48px;
+    }
+    .menu-card {
+      background: #fff; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(26,122,46,.1);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .menu-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(26,122,46,.18); }
+    .card-img {
+      height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 6rem;
+    }
+    .card-img.bg1 { background: linear-gradient(135deg, #ffecd2, #fcb69f); }
+    .card-img.bg2 { background: linear-gradient(135deg, #d4fc79, #96e6a1); }
+    .card-img.bg3 { background: linear-gradient(135deg, #ffeaa7, #fdcb6e); }
+    .card-img.bg4 { background: linear-gradient(135deg, #fd79a8, #e17055); }
+    .card-img.bg5 { background: linear-gradient(135deg, #a29bfe, #6c5ce7); }
+    .card-img.bg6 { background: linear-gradient(135deg, #55efc4, #00b894); }
+    .card-body { padding: 20px; }
+    .card-body h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; }
+    .card-body p { font-size: .88rem; color: #666; margin-bottom: 14px; }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; }
+    .price { font-weight: 800; font-size: 1.1rem; color: var(--green); }
+    .add-btn {
+      background: var(--green); color: #fff; border: none;
+      width: 36px; height: 36px; border-radius: 50%;
+      font-size: 1.3rem; cursor: pointer; transition: background .2s, transform .15s;
+    }
+    .add-btn:hover { background: var(--lime); transform: scale(1.15); }
+
+    /* ── HOW IT WORKS ── */
+    .steps { display: flex; gap: 32px; margin-top: 48px; flex-wrap: wrap; }
+    .step {
+      flex: 1; min-width: 200px;
+      background: #fff; border-radius: 20px; padding: 36px 28px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.07);
+      position: relative; text-align: center;
+    }
+    .step-num {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: var(--green); color: #fff;
+      font-size: 1.5rem; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px;
+    }
+    .step h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 10px; }
+    .step p { font-size: .9rem; color: #555; line-height: 1.6; }
+    .step-icon { font-size: 2.5rem; margin-bottom: 14px; }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials { background: var(--dark); color: #fff; }
+    .testimonials h2 { color: #fff; }
+    .testimonials .section-label { color: var(--lime); }
+    .testi-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px; margin-top: 48px;
+    }
+    .testi-card {
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+      border-radius: 20px; padding: 32px;
+      transition: transform .25s;
+    }
+    .testi-card:hover { transform: translateY(-4px); }
+    .stars { color: var(--yellow); font-size: 1.1rem; margin-bottom: 16px; letter-spacing: 2px; }
+    .testi-card p { font-size: .97rem; line-height: 1.7; color: rgba(255,255,255,.82); margin-bottom: 20px; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; background: rgba(255,255,255,.1);
+    }
+    .testi-author strong { display: block; font-size: .9rem; }
+    .testi-author span { font-size: .8rem; opacity: .6; }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--green), var(--leaf));
+      color: #fff; text-align: center; padding: 100px 6vw;
+    }
+    .cta-section h2 { color: #fff; font-size: clamp(2rem,4vw,3.2rem); }
+    .cta-section p { font-size: 1.1rem; opacity: .9; margin: 16px auto 36px; max-width: 500px; }
+    .cta-section .btn-primary { background: var(--yellow); color: var(--dark); }
+    .cta-section .btn-primary:hover { background: #ffe066; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark); color: rgba(255,255,255,.7);
+      padding: 60px 6vw 30px;
+    }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+    .footer-brand .logo { color: #fff; margin-bottom: 16px; }
+    .footer-brand p { font-size: .9rem; line-height: 1.7; }
+    footer h4 { color: #fff; font-weight: 800; margin-bottom: 16px; font-size: .95rem; }
+    footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    footer ul a { color: rgba(255,255,255,.65); text-decoration: none; font-size: .9rem; transition: color .2s; }
+    footer ul a:hover { color: var(--lime); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.12);
+      padding-top: 24px; text-align: center; font-size: .85rem;
+    }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; text-align: center; padding-top: 100px; }
+      .hero-visual { margin-top: 20px; }
+      .train-plate { width: 280px; height: 280px; font-size: 7rem; }
+      .hero p { margin-inline: auto; }
+      .hero-btns { justify-content: center; }
+      .stats-bar { gap: 30px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      nav ul { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo"><span class="train-icon">🚆</span>Veg<span>Train</span></div>
+  <ul>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#how">Kaise Kaam Karta Hai</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-btn">Order Karein 🛒</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="badge">🌱 100% Pure Vegetarian</div>
+    <h1>Swad Ka <em>Safar</em> Shuru Karein</h1>
+    <p>VegTrain ke saath enjoy karein fresh, healthy aur lajawab vegetarian khana — seedha aapke ghar tak. Har dish mein hai apnapan, har bite mein hai desh ka swad.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-primary">Menu Dekhein 🍱</a>
+      <a href="#how" class="btn-secondary">Kaise Kaam Karta Hai</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="train-plate">🥘</div>
+    <div class="floating-tags">
+      <div class="tag-chip">🌿 No Onion No Garlic Available</div>
+      <div class="tag-chip">⚡ 30 min Delivery</div>
+      <div class="tag-chip">🏆 Hygienically Prepared</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><strong>50,000+</strong><span>Happy Customers</span></div>
+  <div class="stat"><strong>120+</strong><span>Menu Items</span></div>
+  <div class="stat"><strong>15+</strong><span>Shahar</span></div>
+  <div class="stat"><strong>4.8★</strong><span>Average Rating</span></div>
+</div>
+
+<!-- MENU -->
+<section class="menu-section" id="menu">
+  <p class="section-label">Hamaara Menu</p>
+  <h2>Aaj Kya Khana Hai? 🍽️</h2>
+  <p style="color:#555;max-width:560px">Fresh ingredients, traditional recipes aur ghar jaisa swad — yahi hai VegTrain ki pehchan.</p>
+
+  <div class="menu-grid">
+    <div class="menu-card reveal">
+      <div class="card-img bg1">🍛</div>
+      <div class="card-body">
+        <h3>Dal Makhani Thali</h3>
+        <p>Slow-cooked kali dal, butter roti, rice, achar aur raita ke saath.</p>
+        <div class="card-footer">
+          <span class="price">₹199</span>
+          <button class="add-btn">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <div class="card-img bg2">🥗</div>
+      <div class="card-body">
+        <h3>Garden Fresh Bowl</h3>
+        <p>Seasonal vegetables, quinoa, mint chutney aur lemon dressing.</p>
+        <div class="card-footer">
+          <span class="price">₹179</span>
+          <button class="add-btn">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <div class="card-img bg3">🧆</div>
+      <div class="card-body">
+        <h3>Paneer Tikka Platter</h3>
+        <p>Tandoor-grilled paneer tikka with green chutney aur laccha onion.</p>
+        <div class="card-footer">
+          <span class="price">₹249</span>
+          <button class="add-btn">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <div class="card-img bg4">🍜</div>
+      <div class="card-body">
+        <h3>Rajma Rice Combo</h3>
+        <p>Classic Punjabi rajma, steamed basmati rice aur homemade ghee.</p>
+        <div class="card-footer">
+          <span class="price">₹159</span>
+          <button class="add-btn">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <div class="card-img bg5">🥞</div>
+      <div class="card-body">
+        <h3>Masala Dosa Platter</h3>
+        <p>Crispy dosa with spiced aloo filling, sambar aur coconut chutney.</p>
+        <div class="card-footer">
+          <span class="price">₹139</span>
+          <button class="add-btn">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="menu-card reveal">
+      <div class="card-img bg6">🍡</div>
+      <div class="card-body">
+        <h3>Chole Bhature</h3>
+        <p>Fluffy bhature with spicy chole, pickle aur green chilli garnish.</p>
+        <div class="card-footer">
+          <span class="price">₹149</span>
+          <button class="add-btn">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <p class="section-label">Simple Process</p>
+  <h2>Sirf 4 Steps, Khana Ready! 🚀</h2>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-icon">📱</div>
+      <div class="step-num">1</div>
+      <h3>App Kholo</h3>
+      <p>VegTrain app download karein ya website visit karein. Registration bilkul free hai.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-icon">🍽️</div>
+      <div class="step-num">2</div>
+      <h3>Menu Choose Karein</h3>
+      <p>120+ vegetarian dishes mein se apni pasand ka khana select karein.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-icon">💳</div>
+      <div class="step-num">3</div>
+      <h3>Payment Karein</h3>
+      <p>UPI, card, wallet ya cash on delivery — jaise chaaho pay karein.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-icon">🚆</div>
+      <div class="step-num">4</div>
+      <h3>Khana Enjoy Karein</h3>
+      <p>30 minutes mein fresh, hot khana aapke darwaze par. Guaranteed!</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="reviews">
+  <p class="section-label">Customer Reviews</p>
+  <h2>Log Kya Kehte Hain 💬</h2>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>"VegTrain ka Dal Makhani bilkul ghar jaisa lagta hai. Meri family ka sabka favourite ban gaya hai. Har hafte order karte hain!"</p>
+      <div class="testi-author">
+        <div class="avatar">😊</div>
+        <div><strong>Priya Sharma</strong><span>Delhi</span></div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>"Pure veg hone ke baad bhi itna variety! Aur quality top-notch. 30 minute delivery ka promise hamesha pura hota hai. Zabardast!"</p>
+      <div class="testi-author">
+        <div class="avatar">🙂</div>
+        <div><strong>Rajesh Gupta</strong><span>Lucknow</span></div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="stars">★★★★⭐</div>
+      <p>"No onion no garlic option bahut achha hai. Festival ke time sab kuch easily milta hai. Definitely recommend karenge apno ko!"</p>
+      <div class="testi-author">
+        <div class="avatar">🤩</div>
+        <div><strong>Kavita Jain</strong><span>Patna</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Pehla Order 20% Discount Ke Saath! 🎉</h2>
+  <p>Abhi sign up karein aur pehle order par paayen special discount. Limited time offer!</p>
+  <a href="#" class="btn-primary">Abhi Order Karein → </a>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">🚆 Veg<span>Train</span></div>
+      <p>Pure vegetarian food ki ek nai duniya. Fresh ingredients, traditional recipes aur modern convenience — sab ek jagah.</p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#">Offers</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Help</h4>
+      <ul>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">📞 1800-VEG-TRAIN</a></li>
+        <li><a href="#">📧 hello@vegtrain.in</a></li>
+        <li><a href="#">📍 Multiple Cities</a></li>
+        <li><a href="#">⏰ 8AM – 11PM</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 VegTrain. Sabka swad, sabka pyaar. 🌱 Made with ❤️ in India</p>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 100);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Add to cart feedback
+  document.querySelectorAll('.add-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      this.textContent = '✓';
+      this.style.background = '#2d9e48';
+      setTimeout(() => { this.textContent = '+'; this.style.background = ''; }, 1200);
+    });
+  });
+</script>
+</body>
+</html>
