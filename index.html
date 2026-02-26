@@ -45,6 +45,600 @@
         <p>You can also include forms inside the navigation bar.</p>
     </div>
 
+
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login / Signup</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap"
+            rel="stylesheet" />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            :root {
+                --bg: #f5f3ef;
+                --surface: #ffffff;
+                --ink: #1a1814;
+                --ink-muted: #7a7570;
+                --accent: #c8602a;
+                --accent-light: #f5ede7;
+                --border: #e4e0da;
+                --radius: 4px;
+            }
+
+            body {
+                font-family: 'DM Sans', sans-serif;
+                background: var(--bg);
+                min-height: 100vh;
+                display: grid;
+                place-items: center;
+                padding: 2rem;
+            }
+
+            /* Subtle background texture */
+            body::before {
+                content: '';
+                position: fixed;
+                inset: 0;
+                background-image:
+                    radial-gradient(circle at 20% 50%, rgba(200, 96, 42, 0.06) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(26, 24, 20, 0.04) 0%, transparent 40%);
+                pointer-events: none;
+            }
+
+            .card {
+                background: var(--surface);
+                width: 100%;
+                max-width: 420px;
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04), 0 8px 32px rgba(0, 0, 0, 0.06);
+                animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            }
+
+            @keyframes rise {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* Tab switcher */
+            .tabs {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .tab-btn {
+                all: unset;
+                cursor: pointer;
+                padding: 1.2rem;
+                text-align: center;
+                font-size: 0.85rem;
+                font-weight: 500;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--ink-muted);
+                transition: color 0.2s, background 0.2s;
+                position: relative;
+            }
+
+            .tab-btn::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: var(--accent);
+                transform: scaleX(0);
+                transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            .tab-btn.active {
+                color: var(--ink);
+            }
+
+            .tab-btn.active::after {
+                transform: scaleX(1);
+            }
+
+            /* Form panels */
+            .panels {
+                position: relative;
+                overflow: hidden;
+            }
+
+            .panel {
+                padding: 2.2rem 2rem 2rem;
+                display: none;
+                animation: fadeIn 0.3s ease;
+            }
+
+            .panel.active {
+                display: block;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(12px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            /* Heading */
+            .panel-title {
+                font-family: 'DM Serif Display', serif;
+                font-size: 1.7rem;
+                color: var(--ink);
+                line-height: 1.2;
+                margin-bottom: 0.35rem;
+            }
+
+            .panel-sub {
+                font-size: 0.82rem;
+                color: var(--ink-muted);
+                margin-bottom: 1.8rem;
+            }
+
+            /* Fields */
+            .field {
+                margin-bottom: 1.1rem;
+            }
+
+            label {
+                display: block;
+                font-size: 0.75rem;
+                font-weight: 500;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                color: var(--ink-muted);
+                margin-bottom: 0.45rem;
+            }
+
+            input[type="text"],
+            input[type="email"],
+            input[type="password"] {
+                width: 100%;
+                padding: 0.72rem 0.9rem;
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                font-family: 'DM Sans', sans-serif;
+                font-size: 0.9rem;
+                color: var(--ink);
+                background: var(--bg);
+                outline: none;
+                transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+            }
+
+            input:focus {
+                border-color: var(--accent);
+                background: #fff;
+                box-shadow: 0 0 0 3px rgba(200, 96, 42, 0.1);
+            }
+
+            input::placeholder {
+                color: #c0bbb4;
+            }
+
+            /* Password wrapper */
+            .pw-wrap {
+                position: relative;
+            }
+
+            .pw-wrap input {
+                padding-right: 2.6rem;
+            }
+
+            .pw-toggle {
+                position: absolute;
+                right: 0.8rem;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 0;
+                color: var(--ink-muted);
+                display: flex;
+                align-items: center;
+                transition: color 0.15s;
+            }
+
+            .pw-toggle:hover {
+                color: var(--ink);
+            }
+
+            /* Row */
+            .row {
+                display: flex;
+                gap: 0.8rem;
+            }
+
+            .row .field {
+                flex: 1;
+            }
+
+            /* Forgot */
+            .forgot {
+                text-align: right;
+                margin-top: -0.5rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .forgot a {
+                font-size: 0.75rem;
+                color: var(--accent);
+                text-decoration: none;
+            }
+
+            .forgot a:hover {
+                text-decoration: underline;
+            }
+
+            /* Submit button */
+            .btn-primary {
+                width: 100%;
+                padding: 0.85rem;
+                background: var(--ink);
+                color: #fff;
+                border: none;
+                border-radius: var(--radius);
+                font-family: 'DM Sans', sans-serif;
+                font-size: 0.85rem;
+                font-weight: 500;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                cursor: pointer;
+                transition: background 0.2s, transform 0.1s;
+                margin-top: 0.4rem;
+            }
+
+            .btn-primary:hover {
+                background: var(--accent);
+            }
+
+            .btn-primary:active {
+                transform: scale(0.99);
+            }
+
+            /* Divider */
+            .divider {
+                display: flex;
+                align-items: center;
+                gap: 0.8rem;
+                margin: 1.4rem 0;
+                font-size: 0.72rem;
+                color: var(--ink-muted);
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+            }
+
+            .divider::before,
+            .divider::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: var(--border);
+            }
+
+            /* Social buttons */
+            .socials {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.7rem;
+            }
+
+            .btn-social {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                padding: 0.65rem;
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                background: var(--bg);
+                font-family: 'DM Sans', sans-serif;
+                font-size: 0.78rem;
+                font-weight: 500;
+                color: var(--ink);
+                cursor: pointer;
+                transition: border-color 0.2s, background 0.2s;
+            }
+
+            .btn-social:hover {
+                border-color: var(--ink);
+                background: var(--accent-light);
+            }
+
+            /* Terms */
+            .terms {
+                font-size: 0.72rem;
+                color: var(--ink-muted);
+                margin-top: 1rem;
+                line-height: 1.5;
+                text-align: center;
+            }
+
+            .terms a {
+                color: var(--accent);
+                text-decoration: none;
+            }
+
+            /* Checkbox */
+            .check-row {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .check-row input[type="checkbox"] {
+                width: 15px;
+                height: 15px;
+                accent-color: var(--accent);
+                cursor: pointer;
+            }
+
+            .check-row label {
+                font-size: 0.78rem;
+                text-transform: none;
+                letter-spacing: 0;
+                font-weight: 400;
+                color: var(--ink-muted);
+                margin: 0;
+                cursor: pointer;
+            }
+
+            /* Success msg */
+            .success-msg {
+                display: none;
+                background: var(--accent-light);
+                border: 1px solid rgba(200, 96, 42, 0.2);
+                border-radius: var(--radius);
+                padding: 0.7rem 0.9rem;
+                font-size: 0.8rem;
+                color: var(--accent);
+                margin-bottom: 1rem;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="card">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('login', this)">Sign In</button>
+                <button class="tab-btn" onclick="switchTab('signup', this)">Sign Up</button>
+            </div>
+
+            <div class="panels">
+
+                <!-- LOGIN PANEL -->
+                <div class="panel active" id="panel-login">
+                    <h2 class="panel-title">Welcome back.</h2>
+                    <p class="panel-sub">Sign in to continue where you left off.</p>
+
+                    <div id="login-success" class="success-msg">✓ Logged in successfully!</div>
+
+                    <form onsubmit="handleLogin(event)">
+                        <div class="field">
+                            <label for="login-email">Email</label>
+                            <input type="email" id="login-email" placeholder="you@example.com" required />
+                        </div>
+
+                        <div class="field">
+                            <label for="login-pw">Password</label>
+                            <div class="pw-wrap">
+                                <input type="password" id="login-pw" placeholder="••••••••" required />
+                                <button type="button" class="pw-toggle" onclick="togglePw('login-pw', this)"
+                                    aria-label="Show password">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"
+                                        viewBox="0 0 24 24">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="forgot"><a href="#">Forgot password?</a></div>
+
+                        <button type="submit" class="btn-primary">Sign In</button>
+                    </form>
+
+                    <div class="divider">or continue with</div>
+
+                    <div class="socials">
+                        <button class="btn-social">
+                            <svg width="15" height="15" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                <path fill="#34A853"
+                                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                <path fill="#FBBC05"
+                                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
+                                <path fill="#EA4335"
+                                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                            </svg>
+                            Google
+                        </button>
+                        <button class="btn-social">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                            </svg>
+                            GitHub
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SIGNUP PANEL -->
+                <div class="panel" id="panel-signup">
+                    <h2 class="panel-title">Create account.</h2>
+                    <p class="panel-sub">Join us — it only takes a minute.</p>
+
+                    <div id="signup-success" class="success-msg">✓ Account created! Welcome aboard.</div>
+
+                    <form onsubmit="handleSignup(event)">
+                        <div class="row">
+                            <div class="field">
+                                <label for="first-name">First Name</label>
+                                <input type="text" id="first-name" placeholder="Aryan" required />
+                            </div>
+                            <div class="field">
+                                <label for="last-name">Last Name</label>
+                                <input type="text" id="last-name" placeholder="Sharma" required />
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="signup-email">Email</label>
+                            <input type="email" id="signup-email" placeholder="you@example.com" required />
+                        </div>
+
+                        <div class="field">
+                            <label for="signup-pw">Password</label>
+                            <div class="pw-wrap">
+                                <input type="password" id="signup-pw" placeholder="Min. 8 characters" required
+                                    minlength="8" oninput="checkStrength(this)" />
+                                <button type="button" class="pw-toggle" onclick="togglePw('signup-pw', this)"
+                                    aria-label="Show password">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"
+                                        viewBox="0 0 24 24">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <!-- Strength bar -->
+                            <div style="display:flex;gap:4px;margin-top:6px;" id="strength-bars">
+                                <div class="sbar"></div>
+                                <div class="sbar"></div>
+                                <div class="sbar"></div>
+                                <div class="sbar"></div>
+                            </div>
+                        </div>
+
+                        <div class="check-row">
+                            <input type="checkbox" id="terms-check" required />
+                            <label for="terms-check">I agree to the <a href="#" style="color:var(--accent)">Terms</a> &
+                                <a href="#" style="color:var(--accent)">Privacy Policy</a></label>
+                        </div>
+
+                        <button type="submit" class="btn-primary">Create Account</button>
+                    </form>
+
+                    <div class="divider">or sign up with</div>
+
+                    <div class="socials">
+                        <button class="btn-social">
+                            <svg width="15" height="15" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                <path fill="#34A853"
+                                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                <path fill="#FBBC05"
+                                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
+                                <path fill="#EA4335"
+                                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                            </svg>
+                            Google
+                        </button>
+                        <button class="btn-social">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                            </svg>
+                            GitHub
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .sbar {
+                flex: 1;
+                height: 3px;
+                border-radius: 2px;
+                background: var(--border);
+                transition: background 0.3s;
+            }
+        </style>
+
+        <script>
+            function switchTab(name, btn) {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('panel-' + name).classList.add('active');
+            }
+
+            function togglePw(id, btn) {
+                const inp = document.getElementById(id);
+                const isText = inp.type === 'text';
+                inp.type = isText ? 'password' : 'text';
+                btn.innerHTML = isText
+                    ? `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
+                    : `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+            }
+
+            function checkStrength(input) {
+                const val = input.value;
+                let score = 0;
+                if (val.length >= 8) score++;
+                if (/[A-Z]/.test(val)) score++;
+                if (/[0-9]/.test(val)) score++;
+                if (/[^A-Za-z0-9]/.test(val)) score++;
+                const colors = ['#e05252', '#e08a2a', '#c8c030', '#3dba6e'];
+                const bars = document.querySelectorAll('.sbar');
+                bars.forEach((b, i) => {
+                    b.style.background = i < score ? colors[score - 1] : 'var(--border)';
+                });
+            }
+
+            function handleLogin(e) {
+                e.preventDefault();
+                const msg = document.getElementById('login-success');
+                msg.style.display = 'block';
+                setTimeout(() => msg.style.display = 'none', 3000);
+            }
+
+            function handleSignup(e) {
+                e.preventDefault();
+                const msg = document.getElementById('signup-success');
+                msg.style.display = 'block';
+                setTimeout(() => msg.style.display = 'none', 3000);
+            }
+        </script>
+    </body>
+
+    </html>
 </body>
 
 </html>
