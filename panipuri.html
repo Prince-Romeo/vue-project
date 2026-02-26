@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gol Gappa Wala — The Original Pani Puri</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Tiro+Devanagari+Hindi&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --saffron: #FF6B1A;
+    --turmeric: #F5A623;
+    --tamarind: #5C1A00;
+    --mint: #2D6A4F;
+    --chaat: #E8F4D4;
+    --cream: #FFF8EE;
+    --ink: #1A0A00;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 20px; height: 20px;
+    border: 2px solid var(--saffron);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, background 0.2s;
+    mix-blend-mode: multiply;
+  }
+  .cursor.click { background: var(--saffron); transform: translate(-50%,-50%) scale(1.6); }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(255,248,238,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,107,26,0.15);
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; color: var(--tamarind);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .logo span { color: var(--saffron); font-style: italic; }
+  nav ul { list-style: none; display: flex; gap: 2.5rem; }
+  nav ul a {
+    text-decoration: none; color: var(--ink);
+    font-size: 0.85rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    position: relative; padding-bottom: 2px;
+  }
+  nav ul a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 1.5px; background: var(--saffron);
+    transition: width 0.3s;
+  }
+  nav ul a:hover::after { width: 100%; }
+  .nav-btn {
+    background: var(--saffron); color: white;
+    border: none; padding: 0.6rem 1.4rem;
+    border-radius: 30px; font-family: 'DM Sans', sans-serif;
+    font-weight: 500; font-size: 0.85rem;
+    cursor: none; letter-spacing: 0.05em;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .nav-btn:hover { background: var(--tamarind); transform: translateY(-1px); }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-pattern {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(255,107,26,0.06) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(245,166,35,0.08) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  /* Floating dots decoration */
+  .dots {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  }
+  .dot {
+    position: absolute; border-radius: 50%;
+    background: var(--saffron); opacity: 0.06;
+    animation: floatDot linear infinite;
+  }
+
+  @keyframes floatDot {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    10% { opacity: 0.06; }
+    90% { opacity: 0.06; }
+    100% { transform: translateY(-100px) scale(1); opacity: 0; }
+  }
+
+  .hero-left {
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 4rem 3rem 4rem 5rem;
+    position: relative; z-index: 2;
+  }
+
+  .eyebrow {
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--saffron); margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .eyebrow::before {
+    content: ''; display: block;
+    width: 2rem; height: 1.5px; background: var(--saffron);
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 5vw, 5.5rem);
+    line-height: 1.05;
+    color: var(--tamarind);
+    margin-bottom: 1.5rem;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--saffron);
+    display: block;
+  }
+
+  .hero-desc {
+    font-size: 1.05rem; line-height: 1.8;
+    color: #5a3a1a;
+    max-width: 400px;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+
+  .hero-cta {
+    display: flex; gap: 1rem; align-items: center;
+  }
+
+  .btn-primary {
+    background: var(--saffron); color: white;
+    border: none; padding: 1rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500; font-size: 0.95rem;
+    border-radius: 4px; cursor: none;
+    letter-spacing: 0.04em;
+    transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--tamarind);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .btn-primary:hover::before { transform: scaleX(1); }
+  .btn-primary span { position: relative; z-index: 1; }
+
+  .btn-ghost {
+    background: transparent; color: var(--ink);
+    border: 1.5px solid rgba(0,0,0,0.2);
+    padding: 1rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; border-radius: 4px;
+    cursor: none; transition: all 0.3s;
+  }
+  .btn-ghost:hover { border-color: var(--saffron); color: var(--saffron); }
+
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; color: var(--tamarind);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.75rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: #8a6040; margin-top: 0.3rem;
+  }
+
+  /* Hero right — puri bowl illustration */
+  .hero-right {
+    position: relative; display: flex;
+    align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  .bowl-scene {
+    position: relative; width: 480px; height: 480px;
+  }
+
+  .bowl-outer {
+    width: 380px; height: 200px;
+    background: linear-gradient(160deg, #c96a20, #8b3a00);
+    border-radius: 0 0 200px 200px;
+    position: absolute; bottom: 60px; left: 50px;
+    box-shadow: 0 20px 60px rgba(92,26,0,0.3), inset 0 -20px 40px rgba(0,0,0,0.2);
+    overflow: visible;
+  }
+
+  .bowl-liquid {
+    width: 340px; height: 150px;
+    background: linear-gradient(180deg, #1e7a3c 0%, #155a2c 100%);
+    border-radius: 0 0 180px 180px;
+    position: absolute; top: 10px; left: 20px;
+    box-shadow: inset 0 10px 30px rgba(0,0,0,0.15);
+  }
+
+  .bowl-shine {
+    width: 80px; height: 30px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    position: absolute; top: 15px; left: 30px;
+    transform: rotate(-20deg);
+  }
+
+  /* Puris floating */
+  .puri {
+    width: 70px; height: 70px;
+    background: radial-gradient(circle at 35% 35%, #f5c842, #d4820a);
+    border-radius: 50%;
+    position: absolute;
+    box-shadow:
+      0 8px 20px rgba(0,0,0,0.2),
+      inset 0 -5px 10px rgba(0,0,0,0.15),
+      inset 0 3px 8px rgba(255,255,255,0.2);
+    animation: floatPuri ease-in-out infinite;
+  }
+
+  .puri::after {
+    content: '';
+    width: 30px; height: 30px;
+    background: radial-gradient(circle, rgba(0,0,0,0.1), transparent);
+    border-radius: 50%;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+  }
+
+  .puri-1 { top: 30px; left: 80px; animation-duration: 3s; animation-delay: 0s; }
+  .puri-2 { top: 10px; left: 200px; width: 80px; height: 80px; animation-duration: 3.5s; animation-delay: -1s; }
+  .puri-3 { top: 50px; left: 320px; animation-duration: 4s; animation-delay: -2s; }
+  .puri-4 { top: 120px; left: 30px; width: 60px; height: 60px; animation-duration: 2.8s; animation-delay: -0.5s; }
+  .puri-5 { top: 100px; left: 360px; width: 65px; height: 65px; animation-duration: 3.2s; animation-delay: -1.5s; }
+
+  @keyframes floatPuri {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
+  }
+
+  /* Splatter drops */
+  .drop {
+    width: 8px; height: 12px;
+    background: var(--mint);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    position: absolute;
+    animation: dropFall 2s ease-in-out infinite;
+  }
+  .drop-1 { top: 180px; left: 160px; animation-delay: 0s; }
+  .drop-2 { top: 150px; left: 250px; animation-delay: 0.4s; }
+  .drop-3 { top: 200px; left: 310px; animation-delay: 0.8s; }
+
+  @keyframes dropFall {
+    0% { transform: translateY(-10px); opacity: 0; }
+    30% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { transform: translateY(20px); opacity: 0; }
+  }
+
+  .hero-bg-circle {
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,166,35,0.1) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    position: absolute; top: 120px; right: 40px;
+    width: 90px; height: 90px;
+    background: var(--saffron);
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: white;
+    font-family: 'Playfair Display', serif;
+    box-shadow: 0 10px 30px rgba(255,107,26,0.4);
+    animation: spin 8s linear infinite;
+  }
+  .hero-badge .big { font-size: 1.4rem; font-weight: 700; line-height: 1; }
+  .hero-badge .small { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #8a6040; animation: bounce 2s ease-in-out infinite;
+    z-index: 10;
+  }
+  .scroll-hint::after {
+    content: ''; display: block;
+    width: 1px; height: 40px; background: linear-gradient(to bottom, var(--saffron), transparent);
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  /* Marquee band */
+  .marquee-band {
+    background: var(--tamarind);
+    color: var(--turmeric);
+    padding: 0.9rem 0;
+    overflow: hidden; white-space: nowrap;
+    font-size: 0.85rem; letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .marquee-inner {
+    display: inline-block;
+    animation: marquee 20s linear infinite;
+  }
+  .marquee-inner span { margin: 0 2rem; }
+  .marquee-inner .sep { color: var(--saffron); }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Flavors section */
+  .section {
+    padding: 6rem 5rem;
+  }
+  .section-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; margin-bottom: 3.5rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 3vw, 3rem);
+    color: var(--tamarind); line-height: 1.1;
+  }
+  .section-title em { color: var(--saffron); font-style: italic; }
+  .section-eyebrow {
+    font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--saffron);
+    margin-bottom: 0.8rem;
+  }
+  .see-all {
+    font-size: 0.85rem; color: var(--saffron);
+    text-decoration: none; font-weight: 500;
+    display: flex; align-items: center; gap: 0.4rem;
+    transition: gap 0.2s;
+  }
+  .see-all:hover { gap: 0.8rem; }
+
+  /* Flavor cards */
+  .flavors-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+  }
+
+  .flavor-card {
+    border-radius: 12px; overflow: hidden;
+    cursor: none; position: relative;
+    transition: transform 0.3s;
+  }
+  .flavor-card:hover { transform: translateY(-8px); }
+
+  .flavor-img {
+    height: 220px; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  .flavor-card:nth-child(1) .flavor-img { background: linear-gradient(135deg, #1e6b3e, #0d3d20); }
+  .flavor-card:nth-child(2) .flavor-img { background: linear-gradient(135deg, #8b1a1a, #4a0d0d); }
+  .flavor-card:nth-child(3) .flavor-img { background: linear-gradient(135deg, #b5560e, #6b2f00); }
+  .flavor-card:nth-child(4) .flavor-img { background: linear-gradient(135deg, #1a4a8b, #0d2450); }
+
+  .flavor-icon {
+    font-size: 5rem; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+    transition: transform 0.4s;
+  }
+  .flavor-card:hover .flavor-icon { transform: scale(1.15) rotate(-5deg); }
+
+  .spice-tag {
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    color: white; font-size: 0.65rem;
+    padding: 0.3rem 0.7rem; border-radius: 20px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+
+  .spice-tag.mild { background: rgba(255,255,255,0.15); }
+  .spice-tag.medium { background: rgba(255,150,0,0.4); }
+  .spice-tag.hot { background: rgba(220,30,30,0.4); }
+  .spice-tag.sweet { background: rgba(60,200,100,0.3); }
+
+  .flavor-info {
+    background: white; padding: 1.2rem 1.4rem;
+  }
+  .flavor-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; color: var(--tamarind);
+    margin-bottom: 0.3rem;
+  }
+  .flavor-desc {
+    font-size: 0.8rem; color: #7a5535;
+    line-height: 1.5;
+  }
+  .flavor-footer {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-top: 1rem;
+  }
+  .flavor-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; color: var(--saffron);
+  }
+  .add-btn {
+    width: 32px; height: 32px;
+    background: var(--saffron); color: white;
+    border: none; border-radius: 50%;
+    font-size: 1.2rem; cursor: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .add-btn:hover { background: var(--tamarind); transform: scale(1.1); }
+
+  /* Story section */
+  .story-section {
+    background: var(--tamarind);
+    color: var(--cream);
+    display: grid; grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+  .story-left {
+    padding: 6rem 4rem 6rem 5rem;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .story-eyebrow {
+    font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--turmeric);
+    margin-bottom: 1rem;
+  }
+  .story-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 1.1; margin-bottom: 1.5rem;
+  }
+  .story-title em { color: var(--turmeric); font-style: italic; }
+  .story-text {
+    font-size: 1rem; line-height: 1.8;
+    color: rgba(255,248,238,0.7);
+    max-width: 380px; margin-bottom: 2rem;
+    font-weight: 300;
+  }
+  .story-right {
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #8b3a00 0%, #3d1500 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .story-right::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff6b1a' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .story-big-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 15rem; font-weight: 700;
+    color: rgba(255,255,255,0.05);
+    line-height: 1; user-select: none;
+    position: absolute;
+  }
+  .story-feature-list {
+    list-style: none; display: flex;
+    flex-direction: column; gap: 0.8rem;
+    position: relative; z-index: 2;
+    padding: 3rem;
+  }
+  .story-feature-list li {
+    display: flex; align-items: center; gap: 1rem;
+    color: rgba(255,248,238,0.9);
+    font-size: 1rem;
+  }
+  .story-feature-list li::before {
+    content: '●'; color: var(--turmeric);
+    font-size: 0.5rem;
+  }
+
+  /* Order section */
+  .order-section {
+    padding: 6rem 5rem;
+    background: linear-gradient(180deg, var(--cream) 0%, #fff3e0 100%);
+  }
+  .order-grid {
+    display: grid; grid-template-columns: 1fr 1.4fr;
+    gap: 4rem; align-items: center;
+  }
+  .order-text .section-eyebrow { margin-bottom: 0.5rem; }
+  .order-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 3.2rem);
+    color: var(--tamarind); line-height: 1.1;
+    margin-bottom: 1.2rem;
+  }
+  .order-title em { color: var(--saffron); font-style: italic; }
+  .order-desc {
+    font-size: 1rem; color: #7a5535;
+    line-height: 1.8; margin-bottom: 2rem; font-weight: 300;
+  }
+
+  .size-options {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem; margin-bottom: 2rem;
+  }
+  .size-opt {
+    border: 1.5px solid rgba(0,0,0,0.1);
+    border-radius: 8px; padding: 1rem;
+    text-align: center; cursor: none;
+    transition: all 0.2s; background: white;
+  }
+  .size-opt:hover, .size-opt.active {
+    border-color: var(--saffron);
+    background: rgba(255,107,26,0.05);
+  }
+  .size-opt .count {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; color: var(--tamarind); line-height: 1;
+  }
+  .size-opt .label {
+    font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: #8a6040; margin-top: 0.3rem;
+  }
+  .size-opt .price {
+    font-weight: 500; color: var(--saffron);
+    font-size: 0.9rem; margin-top: 0.5rem;
+  }
+
+  /* Map/Location visual */
+  .location-card {
+    background: white; border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  }
+  .location-map-placeholder {
+    height: 280px;
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .map-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,100,50,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,100,50,0.08) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  .map-pin {
+    width: 50px; height: 50px;
+    background: var(--saffron);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    box-shadow: 0 6px 20px rgba(255,107,26,0.4);
+    position: relative; z-index: 2;
+  }
+  .map-pin::after {
+    content: '📍'; position: absolute;
+    font-size: 1.5rem;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%) rotate(45deg);
+  }
+  .location-info { padding: 1.5rem 1.8rem; }
+  .location-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; color: var(--tamarind);
+    margin-bottom: 0.3rem;
+  }
+  .location-address { font-size: 0.85rem; color: #8a6040; margin-bottom: 1rem; }
+  .location-hours {
+    display: flex; justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.06);
+  }
+  .open-badge {
+    background: #e8f5e9; color: #1e7a3c;
+    font-size: 0.7rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 0.3rem 0.7rem; border-radius: 20px;
+  }
+  .hours-text { font-size: 0.85rem; color: #7a5535; }
+
+  /* Testimonials */
+  .testimonials {
+    padding: 6rem 5rem;
+    background: var(--chaat);
+  }
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 3rem;
+  }
+  .test-card {
+    background: white; border-radius: 12px;
+    padding: 1.8rem; position: relative;
+    transition: transform 0.3s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+  .test-card:hover { transform: translateY(-6px); }
+  .test-card::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem; color: var(--saffron);
+    opacity: 0.15; position: absolute;
+    top: -0.5rem; left: 1rem; line-height: 1;
+  }
+  .test-text {
+    font-size: 0.95rem; line-height: 1.7;
+    color: #5a3a1a; margin-bottom: 1.2rem;
+    font-style: italic;
+  }
+  .test-author { display: flex; align-items: center; gap: 0.8rem; }
+  .test-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+  }
+  .test-avatar.a1 { background: linear-gradient(135deg, #ff9a8b, #ff6a88); }
+  .test-avatar.a2 { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+  .test-avatar.a3 { background: linear-gradient(135deg, #ffecd2, #fcb69f); }
+  .test-name { font-weight: 500; font-size: 0.9rem; color: var(--tamarind); }
+  .test-city { font-size: 0.75rem; color: #8a6040; }
+  .stars { color: var(--turmeric); font-size: 0.75rem; letter-spacing: 0.05em; margin-top: 0.2rem; }
+
+  /* Footer */
+  footer {
+    background: #1a0a00; color: rgba(255,248,238,0.6);
+    padding: 4rem 5rem 2rem;
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 3rem; margin-bottom: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; color: white; margin-bottom: 0.8rem;
+  }
+  .footer-logo span { color: var(--saffron); font-style: italic; }
+  .footer-tagline { font-size: 0.85rem; line-height: 1.7; max-width: 220px; }
+  .footer-col h4 {
+    color: var(--turmeric); font-size: 0.7rem;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    margin-bottom: 1.2rem;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .footer-col ul a {
+    color: rgba(255,248,238,0.55); text-decoration: none;
+    font-size: 0.875rem; transition: color 0.2s;
+  }
+  .footer-col ul a:hover { color: var(--turmeric); }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.8rem;
+  }
+
+  /* Animations on scroll */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .flavors-grid { grid-template-columns: 1fr 1fr; }
+    .story-section { grid-template-columns: 1fr; }
+    .order-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .section { padding: 4rem 2rem; }
+    nav { padding: 1rem 1.5rem; }
+    nav ul { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Gol<span>Gappa</span></div>
+  <ul>
+    <li><a href="#">Menu</a></li>
+    <li><a href="#">Story</a></li>
+    <li><a href="#">Locations</a></li>
+    <li><a href="#">Catering</a></li>
+  </ul>
+  <button class="nav-btn">Order Now</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="dots" id="dots"></div>
+
+  <div class="hero-left">
+    <div class="eyebrow">Est. 1987 · Street Food Legacy</div>
+    <h1>
+      India's Most
+      <em>Beloved Bite</em>
+    </h1>
+    <p class="hero-desc">
+      Crispy hollow puris filled with spiced potatoes, chickpeas, and drenched in our signature tangy mint-tamarind water. Every puri tells a story.
+    </p>
+    <div class="hero-cta">
+      <button class="btn-primary"><span>Order Now →</span></button>
+      <button class="btn-ghost">Explore Flavors</button>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">12+</div>
+        <div class="stat-label">Pani Flavors</div>
+      </div>
+      <div>
+        <div class="stat-num">37</div>
+        <div class="stat-label">Years of Heritage</div>
+      </div>
+      <div>
+        <div class="stat-num">50K</div>
+        <div class="stat-label">Happy Customers</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-bg-circle"></div>
+    <div class="bowl-scene">
+      <div class="puri puri-1"></div>
+      <div class="puri puri-2"></div>
+      <div class="puri puri-3"></div>
+      <div class="puri puri-4"></div>
+      <div class="puri puri-5"></div>
+      <div class="drop drop-1"></div>
+      <div class="drop drop-2"></div>
+      <div class="drop drop-3"></div>
+      <div class="bowl-outer">
+        <div class="bowl-liquid">
+          <div class="bowl-shine"></div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-badge">
+      <div class="big">★ 4.9</div>
+      <div class="small">Rated</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-band">
+  <div class="marquee-inner">
+    <span>Pudina Pani</span><span class="sep">✦</span>
+    <span>Imli Pani</span><span class="sep">✦</span>
+    <span>Hing Jeera Pani</span><span class="sep">✦</span>
+    <span>Jaljeera Pani</span><span class="sep">✦</span>
+    <span>Amchur Pani</span><span class="sep">✦</span>
+    <span>Sweet Pani</span><span class="sep">✦</span>
+    <span>Spicy Pani</span><span class="sep">✦</span>
+    <span>Masala Pani</span><span class="sep">✦</span>
+    <span>Pudina Pani</span><span class="sep">✦</span>
+    <span>Imli Pani</span><span class="sep">✦</span>
+    <span>Hing Jeera Pani</span><span class="sep">✦</span>
+    <span>Jaljeera Pani</span><span class="sep">✦</span>
+    <span>Amchur Pani</span><span class="sep">✦</span>
+    <span>Sweet Pani</span><span class="sep">✦</span>
+    <span>Spicy Pani</span><span class="sep">✦</span>
+    <span>Masala Pani</span><span class="sep">✦</span>
+  </div>
+</div>
+
+<!-- FLAVORS -->
+<section class="section reveal">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">Our Specialty</div>
+      <h2 class="section-title">Signature <em>Pani</em> Flavors</h2>
+    </div>
+    <a href="#" class="see-all">See Full Menu →</a>
+  </div>
+  <div class="flavors-grid">
+    <div class="flavor-card reveal">
+      <div class="flavor-img">
+        <div class="flavor-icon">🌿</div>
+        <div class="spice-tag medium">Medium</div>
+      </div>
+      <div class="flavor-info">
+        <div class="flavor-name">Pudina Pani</div>
+        <div class="flavor-desc">Fresh mint, coriander, green chilli, lemon. The classic that started it all.</div>
+        <div class="flavor-footer">
+          <div class="flavor-price">₹60</div>
+          <button class="add-btn">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="flavor-card reveal">
+      <div class="flavor-img">
+        <div class="flavor-icon">🍫</div>
+        <div class="spice-tag sweet">Sweet</div>
+      </div>
+      <div class="flavor-info">
+        <div class="flavor-name">Imli Meetha Pani</div>
+        <div class="flavor-desc">Tamarind, jaggery, date chutney. Sweet, tangy and deeply satisfying.</div>
+        <div class="flavor-footer">
+          <div class="flavor-price">₹60</div>
+          <button class="add-btn">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="flavor-card reveal">
+      <div class="flavor-img">
+        <div class="flavor-icon">🌶️</div>
+        <div class="spice-tag hot">Very Hot</div>
+      </div>
+      <div class="flavor-info">
+        <div class="flavor-name">Teekha Masala</div>
+        <div class="flavor-desc">Extra chilli, black salt, asafoetida. Only for the brave-hearted.</div>
+        <div class="flavor-footer">
+          <div class="flavor-price">₹65</div>
+          <button class="add-btn">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="flavor-card reveal">
+      <div class="flavor-img">
+        <div class="flavor-icon">💧</div>
+        <div class="spice-tag mild">Mild</div>
+      </div>
+      <div class="flavor-info">
+        <div class="flavor-name">Jaljeera Sharbat</div>
+        <div class="flavor-desc">Cumin forward, cooling & refreshing. Perfect summer companion.</div>
+        <div class="flavor-footer">
+          <div class="flavor-price">₹55</div>
+          <button class="add-btn">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story-section reveal">
+  <div class="story-left">
+    <div class="story-eyebrow">Our Heritage</div>
+    <h2 class="story-title">
+      Crafted with<br>
+      <em>Generations</em> of Love
+    </h2>
+    <p class="story-text">
+      Our recipe hasn't changed since 1987. Same tamarind seeds, same hand-ground spices, same hollow semolina puris fried to a perfect golden crunch. What started as a single thela in Varanasi is now a beloved institution.
+    </p>
+    <button class="btn-primary"><span>Read Our Story →</span></button>
+  </div>
+  <div class="story-right">
+    <div class="story-big-num">37</div>
+    <ul class="story-feature-list">
+      <li>Hand-crafted puris fried fresh every hour</li>
+      <li>Spice blends ground daily in-house</li>
+      <li>100% natural ingredients, no preservatives</li>
+      <li>Secret tamarind & date chutney recipe</li>
+      <li>Hygienic, RO-purified pani</li>
+      <li>FSSAI certified kitchen</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ORDER -->
+<section class="order-section">
+  <div class="order-grid">
+    <div class="order-text reveal">
+      <div class="section-eyebrow">Place Your Order</div>
+      <h2 class="order-title">Pick Your <em>Perfect</em> Portion</h2>
+      <p class="order-desc">
+        Whether you're a solo snacker or feeding the whole family, we've got the right plate for you. Mix and match flavors, add extra filling, make it yours.
+      </p>
+      <div class="size-options">
+        <div class="size-opt">
+          <div class="count">6</div>
+          <div class="label">Puris</div>
+          <div class="price">₹60</div>
+        </div>
+        <div class="size-opt active">
+          <div class="count">12</div>
+          <div class="label">Puris</div>
+          <div class="price">₹110</div>
+        </div>
+        <div class="size-opt">
+          <div class="count">20</div>
+          <div class="label">Puris</div>
+          <div class="price">₹180</div>
+        </div>
+      </div>
+      <button class="btn-primary"><span>Add to Cart →</span></button>
+    </div>
+    <div class="location-card reveal">
+      <div class="location-map-placeholder">
+        <div class="map-grid"></div>
+        <div class="map-pin"></div>
+      </div>
+      <div class="location-info">
+        <div class="location-name">GolGappa Wala — Main Branch</div>
+        <div class="location-address">Dashashwamedh Ghat Road, Varanasi, UP 221001</div>
+        <div class="location-hours">
+          <span class="open-badge">● Open Now</span>
+          <span class="hours-text">11:00 AM – 10:30 PM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-eyebrow">What People Say</div>
+      <h2 class="section-title">The <em>Love</em> Speaks</h2>
+    </div>
+  </div>
+  <div class="testimonials-grid">
+    <div class="test-card reveal">
+      <p class="test-text">The pudina pani here is absolutely divine. I've been eating pani puri for 30 years and nothing comes close to this. The puri shatters perfectly!</p>
+      <div class="test-author">
+        <div class="test-avatar a1">👩</div>
+        <div>
+          <div class="test-name">Priya Sharma</div>
+          <div class="test-city">Varanasi</div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card reveal">
+      <p class="test-text">We ordered for our daughter's wedding — 500 guests, and not a single puri was left! The catering team was efficient and incredibly professional.</p>
+      <div class="test-author">
+        <div class="test-avatar a2">👨</div>
+        <div>
+          <div class="test-name">Ramesh Gupta</div>
+          <div class="test-city">Lucknow</div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card reveal">
+      <p class="test-text">Visited during a work trip and ended up coming back every single day. The teekha masala pani had me in tears (the good kind). Addictive stuff!</p>
+      <div class="test-author">
+        <div class="test-avatar a3">👩</div>
+        <div>
+          <div class="test-name">Aisha Khan</div>
+          <div class="test-city">Mumbai</div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">Gol<span>Gappa</span></div>
+      <p class="footer-tagline">India's original pani puri experience. Crafted with love, spice, and a splash of tradition since 1987.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Menu</h4>
+      <ul>
+        <li><a href="#">Pani Puri</a></li>
+        <li><a href="#">Dahi Puri</a></li>
+        <li><a href="#">Sev Puri</a></li>
+        <li><a href="#">Ragda Puri</a></li>
+        <li><a href="#">Masala Puri</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Locations</a></li>
+        <li><a href="#">Catering</a></li>
+        <li><a href="#">Franchise</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">+91 98765 43210</a></li>
+        <li><a href="#">hello@golgappawala.in</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Swiggy</a></li>
+        <li><a href="#">Zomato</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 GolGappa Wala. All rights reserved.</span>
+    <span>Made with 🌶️ in Varanasi</span>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.addEventListener('mousedown', () => cursor.classList.add('click'));
+  document.addEventListener('mouseup', () => cursor.classList.remove('click'));
+
+  // Floating dots
+  const dotsContainer = document.getElementById('dots');
+  for (let i = 0; i < 15; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    const size = Math.random() * 30 + 10;
+    dot.style.cssText = `
+      width: ${size}px; height: ${size}px;
+      left: ${Math.random() * 100}%;
+      animation-duration: ${Math.random() * 8 + 6}s;
+      animation-delay: ${Math.random() * -12}s;
+    `;
+    dotsContainer.appendChild(dot);
+  }
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Size option selection
+  document.querySelectorAll('.size-opt').forEach(opt => {
+    opt.addEventListener('click', function() {
+      document.querySelectorAll('.size-opt').forEach(o => o.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Add to cart animation
+  document.querySelectorAll('.add-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.textContent = '✓';
+      this.style.background = '#2D6A4F';
+      setTimeout(() => {
+        this.textContent = '+';
+        this.style.background = '';
+      }, 1200);
+    });
+  });
+</script>
+</body>
+</html>
